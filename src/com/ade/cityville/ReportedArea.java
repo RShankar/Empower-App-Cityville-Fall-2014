@@ -11,20 +11,27 @@ import android.location.Location;
  */
 public class ReportedArea {
 	private double radius;
-	private String address;
-	private String longitude, latitude;
-	private String type;
+	private String id, type, address, longitude, latitude;
 	private Location location;
+	
+	public ReportedArea(){}
 	
 	public ReportedArea(String atype, double aradius, String aadress, String along, String alat ){
 		type = atype;
 		radius = aradius;
 		address = aadress;
-		longitude = along;
-		latitude = alat;
-		location = new Location(atype);
-		location.setLatitude(Double.parseDouble(alat));
-		location.setLongitude(Double.parseDouble(along));
+		if(along != null && alat != null)
+		{
+			if ((!alat.equals("") && !alat.equals(" ")) && (!along.equals("") && !along.equals(" "))){
+				location = new Location(atype);
+				location.setLatitude(Double.parseDouble(alat));
+				location.setLongitude(Double.parseDouble(along));
+			}
+		}
+		else {
+			location = AppData.getLatLongFromAddress(aadress);
+			longitude = "" + location.getLatitude();
+			latitude = "" + location.getLongitude();}
 	}
 
 	/**
@@ -52,7 +59,13 @@ public class ReportedArea {
 	 * @param address the address to set
 	 */
 	public void setAddress(String address) {
-		this.address = address;
+		if (address != null){
+			if (!address.equalsIgnoreCase(" ") && !address.equalsIgnoreCase(""))
+			this.address = address;
+			location = AppData.getLatLongFromAddress(address);
+			longitude = "" + location.getLatitude();
+			latitude = "" + location.getLongitude();
+		}
 	}
 
 	/**
@@ -66,7 +79,21 @@ public class ReportedArea {
 	 * @param longitude the longitude to set
 	 */
 	public void setLongitude(String longitude) {
-		this.longitude = longitude;
+		
+		
+		if(longitude != null)
+		{
+			if (!longitude.equals("") && !longitude.equals(" ")){
+				this.longitude = longitude;
+				if (location != null){
+					location.setLongitude(Double.parseDouble(longitude));
+				}else{
+					location = new Location(this.id);
+					location.setLatitude(Double.parseDouble(latitude));
+					location.setLongitude(Double.parseDouble(longitude));
+				}
+			}
+		}	
 	}
 
 	/**
@@ -80,7 +107,19 @@ public class ReportedArea {
 	 * @param latitude the latitude to set
 	 */
 	public void setLatitude(String latitude) {
-		this.latitude = latitude;
+		if(latitude != null)
+		{
+			if (!latitude.equals("") && !latitude.equals(" ")){
+				this.latitude = latitude;
+				if (location != null){
+					location.setLatitude(Double.parseDouble(latitude));
+				}else{
+					location = new Location(this.id);
+					location.setLatitude(Double.parseDouble(latitude));
+					location.setLongitude(Double.parseDouble(longitude));
+				}
+			}
+		}
 	}
 
 	/**
@@ -109,5 +148,19 @@ public class ReportedArea {
 	 */
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
 	}
 }

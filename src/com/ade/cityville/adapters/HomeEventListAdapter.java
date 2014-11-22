@@ -7,14 +7,18 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.ade.cityville.*;
+import com.ade.cityville.Server.RServer;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -23,7 +27,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
  * @author alainedwards
  *
  */
-public class HomeEventListAdapter extends ArrayAdapter{
+public class HomeEventListAdapter extends ArrayAdapter implements Filterable{
 
 	private Context c;
 	private ArrayList<CityEvent> events, filteredEvents;
@@ -58,22 +62,82 @@ public class HomeEventListAdapter extends ArrayAdapter{
         View vi = inflater.inflate(R.layout.eventlistrow, parent, false);
         TextView tv_EventName = (TextView) vi.findViewById(R.id.textViewEventName);
         TextView tv_EventTime = (TextView) vi.findViewById(R.id.textViewEventDateNTime);
-        ImageView iv_EventIcon = (ImageView) vi.findViewById(R.id.imageViewEventIcon);
+        final ImageView iv_EventIcon = (ImageView) vi.findViewById(R.id.imageViewEventIcon);
         
         tv_EventName.setText(events.get(position).getName());
         tv_EventTime.setText(events.get(position).getDate() + " @ " + events.get(position).getTime());
         
-        String image = events.get(position).getImg();
+        final String image = events.get(position).getImg(); final CityEvent tempce = events.get(position);
         if (image.equalsIgnoreCase("") || image.equalsIgnoreCase(" ") || image == null){
         	iv_EventIcon.setImageResource(getEventIcon(events.get(position).getName().substring(0, 1).toLowerCase()));
         }else{
-        	iv_EventIcon.setImageURI(Uri.parse(c.getString(R.string.image_server_address) + image));
+        	//iv_EventIcon.setImageURI(Uri.parse(c.getString(R.string.image_server_address) + image));
+        	new Thread(new Runnable(){//Cannot run http request on main thread
+
+				@Override
+				public void run() {
+					Bitmap bm = RServer.getImg(c.getString(R.string.image_server_address) + image);
+					if (bm !=null){
+					iv_EventIcon.setImageBitmap(bm);}
+					else{iv_EventIcon.setImageResource(getEventIcon(tempce.getName().substring(0, 1).toLowerCase()));}
+				}});
         }
         
         
         return vi;
     }
+    
+    public ArrayList<CityEvent> getCurrentCEvents(){
+    	return events;
+    }
 
+    @Override
+	public Filter getFilter() {
+		
+		return new Filter()
+	       {
+	            @Override
+	            protected FilterResults performFiltering(CharSequence charSequence)
+	            {
+	                FilterResults results = new FilterResults();
+
+	                //If there's nothing to filter on, return the original data for your list
+	                if(charSequence == null || charSequence.length() == 0 || charSequence.equals(""))
+	                {
+	                    results.values = filteredEvents;
+	                    results.count = filteredEvents.size();
+	                }
+	                else
+	                {
+	                	ArrayList<CityEvent> filterResultsData = new ArrayList<CityEvent>();
+
+	                    for(CityEvent ce : events)
+	                    {
+	                        //In this loop, you'll filter through originalData and compare each item to charSequence.
+	                        //If you find a match, add it to your new ArrayList
+	                        //I'm not sure how you're going to do comparison, so you'll need to fill out this conditional
+	                        if(ce.getName().toLowerCase().contains(charSequence.toString().toLowerCase()))
+	                        {
+	                            filterResultsData.add(ce);
+	                        }
+	                    }            
+
+	                    results.values = filterResultsData;
+	                    results.count = filterResultsData.size();
+	                }
+
+	                return results;
+	            }
+
+	            @Override
+	            protected void publishResults(CharSequence charSequence, FilterResults filterResults)
+	            {
+	                //TODO Update view here
+	            	events = (ArrayList<CityEvent>) filterResults.values;
+	            	notifyDataSetChanged();
+	            }
+	        };
+	}
 	private int getEventIcon(String letter) {
 		Random rand = new Random();
 		int randNum = rand.nextInt(8);

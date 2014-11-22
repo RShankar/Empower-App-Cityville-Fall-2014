@@ -1,11 +1,14 @@
 package com.ade.cityville;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.SearchManager;
 import android.content.Context;
+import android.database.MatrixCursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -18,6 +21,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 
 import com.ade.cityville.adapters.*;
@@ -27,6 +32,7 @@ public class HomeActivity extends FragmentActivity implements
 
 	MainCollectionPagerAdapter mCollectionPagerAdapter;
 	ViewPager mViewPager;
+	private static int currentFragment = 0;
 	private static HomeGridFragment homeGridFragment;
 	private static HomeListFragment homeListFragment;
 	private static HomeMapFragment homeMapFragment;
@@ -182,7 +188,43 @@ public class HomeActivity extends FragmentActivity implements
 			// decide what to show in the action bar.
 			getMenuInflater().inflate(R.menu.home, menu);
 			restoreActionBar();
+			
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+
+		        SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+		        SearchView search = (SearchView) menu.findItem(R.id.search).getActionView();
+
+		        search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+
+		        search.setOnQueryTextListener(new OnQueryTextListener() { 
+
+		            @Override 
+		            public boolean onQueryTextChange(String query) {
+		            	switch(currentFragment){
+		            		case 0: homeGridFragment.getFilter().filter(query);
+		            			break;
+		            		case 1: homeListFragment.searchEvents(query);;
+		            			break;
+		            		case 2: homeMapFragment.getFilter().filter(query);
+		            			break;
+		            	}
+
+		                return true; 
+		            }
+
+					@Override
+					public boolean onQueryTextSubmit(String query) {
+						// TODO Auto-generated method stub
+						return false;
+					} 
+
+		        });
+
+		    }
 			return true;
+		}else{
+			getMenuInflater().inflate(R.menu.home_wo_search, menu);
 		}
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -244,19 +286,38 @@ public class HomeActivity extends FragmentActivity implements
 		transaction.replace(R.id.container, homeGridFragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
-		
+		currentFragment = 0;
 	}
 	public void showListView(){
 		transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.container, homeListFragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
+		currentFragment = 1;
 	}
 	public void showMapView(){
 		transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.container, homeMapFragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
+		currentFragment = 2;
+	}
+	
+	/**
+	 * @return the currentFragment
+	 */
+	public static int getCurrentFragment() {
+		return currentFragment;
+	}
+
+	/**
+	 * @param currentFragment the currentFragment to set
+	 */
+	public static void setCurrentFragment(int currentFragment) {
+		HomeActivity.currentFragment = currentFragment;
+	}
+
+	public void closeND(){
 		
 	}
 

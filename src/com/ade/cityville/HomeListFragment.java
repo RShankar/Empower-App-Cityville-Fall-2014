@@ -36,7 +36,8 @@ public class HomeListFragment extends Fragment {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
-					toCityEventActivity(position);
+					if (position < listAdapter.getCurrentCEvents().size()){
+					toCityEventActivity(listAdapter.getCurrentCEvents().get(position));}
 				}});
 		}else{
 			//If there are no city events, display some image and text.
@@ -58,10 +59,14 @@ public class HomeListFragment extends Fragment {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	protected void toCityEventActivity(int position) {
+	protected void toCityEventActivity(CityEvent ce) {
 		Intent intent = new Intent(getActivity(), CityEventActivity.class);
 		//intent.putExtra("CITY_EVENT_Name", position);
-		intent.putExtra("THE-CITY-EVENT", AppData.getCityEventsList().get(position));
+		intent.putExtra("THE-CITY-EVENT", ce);
 		startActivity(intent);
+	}
+	
+	public void searchEvents(String text){
+		HomeListFragment.this.listAdapter.getFilter().filter(text);
 	}
 }

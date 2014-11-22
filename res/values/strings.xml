@@ -13,38 +13,37 @@
     <!-- Left (Start) Navigation Drawer -->
     <string-array name="nav_tabs">
         <item>Home</item>
-        <item >About Us</item>
-        <item >Settings</item>
+        <item >Post Event</item>
+        <item>Report Area</item>
+        <item>About Us</item>
+        <item>Settings</item>
     </string-array>
-    
     <string-array name="home_tabs">
         <item>Grid View</item>
-        <item >Map View</item>
-        <item >List View</item>
-        <item >Favorites</item>
+        <item>Map View</item>
+        <item>List View</item>
+        <item>Favorites</item>
     </string-array>
-    
+
     <!-- Left (Start) Navigation Drawer -->
     <string-array name="nav_tabs_r">
         <item>Event Filters</item>
-        <item >Age Restrictions</item>
+        <item>Age Restrictions</item>
     </string-array>
-    
     <string-array name="event_filters">
         <item>Education</item>
-        <item >Community</item>
-        <item >Entertainment</item>
-        <item >Family</item>
+        <item>Community</item>
+        <item>Entertainment</item>
+        <item>Family</item>
         <item>Music</item>
-        <item >Food</item>
+        <item>Food</item>
     </string-array>
-    
     <string-array name="age_restrictions">
         <item>Everyone</item>
-        <item >10+</item>
-        <item >13+</item>
-        <item >17+</item>
-        <item >18+</item>
+        <item>10+</item>
+        <item>13+</item>
+        <item>17+</item>
+        <item>18+</item>
     </string-array>
 
     <!-- Navigation Drawer for Home Activity -->
@@ -54,22 +53,35 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
-    
+
     <!-- ActionBar -->
     <string name="search_title">Search Events</string>
-
+	
+    <!-- About Us -->
+    <string name="about_group">
+	    Cityville
+	    \nDeveloped by:
+	    	\n\t> Alain Edwards
+	    	\n\t> Adam	Moulton
+	    	\n\t> Lance	Williams
+	</string>
+	
     <!-- Misc -->
     <string name="server_address">http://lamp.cse.fau.edu/~aedwar50</string>
     <string name="image_server_address">http://lamp.cse.fau.edu/~aedwar50/Cityville/images/</string>
     <string name="db_address">http://lamp.cse.fau.edu/~aedwar50/Cityville/cmd.php</string>
-    
     <string name="title_activity_home_grid">HomeGridActivity</string>
     <string name="title_activity_home_list">HomeListActivity</string>
     <string name="title_activity_home_map">HomeMapActivity</string>
     <string name="title_activity_city_event">CityEventActivity</string>
-    
+
     <!-- Number patterns -->
     <string name="lat_lng_pattern">* ###.00000000;* -###.00000000</string>
     <string name="radius_pattern">* #.0000</string>
+    
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_async_task_complete_listener">AsyncTaskCompleteListener</string>
+    <string name="title_activity_register">Register</string>
 
+    
 </resources>

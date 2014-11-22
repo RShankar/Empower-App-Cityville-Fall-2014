@@ -24,6 +24,7 @@ public class AppData {
 	private static ArrayList<ReportedArea> ReportsList = new ArrayList<ReportedArea>();
 	private static Location currentLocation;
 	private static Context c;
+	public static boolean loggedIn = false;
 
 	public static boolean initializeData(){
 		if (c == null){return false;}
@@ -34,17 +35,43 @@ public class AppData {
 		try {
 			CityEventsList = RServer.getAllEvents();
 		} catch (Exception e) {
-			Log.e("Initilize Data", e.toString());
-			//return false;
+			Log.e("Initilize City Events List", e.toString());
+		}
+		
+		try{
+			ReportsList = RServer.getAllReportedAreas();
+		} catch (Exception e) {
+			Log.e("Initilize Reported Areas List", e.toString());
 		}
 		
 		try{
 		//TODO Remove on release
-		CityEventsList.add(new CityEvent(0,"11/14/2014","12:00","Cleanup the park", "901 NW 178th Ave Pembroke Pines, FL 33029","954 205-1872", 0,5, 13, "","1.jpg" ));
-		CityEventsList.add(new CityEvent(1,"11/15/2014","1:00","Rose G Price Park", "901 NW 208th Ave , Hollywood, FL 33029","954 205-1872", 0,5, 13, "","" ));
-		CityEventsList.add(new CityEvent(2,"11/16/2014","2:00","Frontier Trails Park", "Southwest Ranches, FL 33332","954 205-1872", 10,5, 0, "","" ));
-		CityEventsList.add(new CityEvent(3,"11/17/2014","3:00","HAPPI Farm", "17800 SW 52nd Ct Southwest Ranches, FL 33331","(954) 629-8133", 1,4, 10, "","" ));
-		CityEventsList.add(new CityEvent(4,"11/18/2014","4:00","Naacp", "13230 NW 7th Ave North Miami, FL 33168","(305) 685-8694", 8,5, 18, "","" ));
+		/*CityEventsList.add(new CityEvent("0","11/14/2014","12:00","Cleanup the park", "901 NW 178th Ave Pembroke Pines, FL 33029","954 205-1872", 0,5, 13, "","fun","1.png" ));
+		CityEventsList.add(new CityEvent("1","11/15/2014","1:00","Rose G Price Park", "901 NW 208th Ave , Hollywood, FL 33029","954 205-1872", 0,5, 13, "","fun","" ));
+		CityEventsList.add(new CityEvent("2","11/16/2014","2:00","Frontier Trails Park", "Southwest Ranches, FL 33332","954 205-1872", 10,5, 0, "","fun","" ));
+		CityEventsList.add(new CityEvent("3","11/17/2014","3:00","HAPPI Farm", "17800 SW 52nd Ct Southwest Ranches, FL 33331","(954) 629-8133", 1,4, 10, "","fun","" ));
+		CityEventsList.add(new CityEvent("4","11/18/2014","4:00","Naacp", "13230 NW 7th Ave North Miami, FL 33168","(305) 685-8694", 8,5, 18, "","fun","" ));
+		//FAU Related
+		CityEventsList.add(new CityEvent("5","12/12/2014","2:00","Engineering Graduation", "777 Glades Rd, Boca Raton, FL 33431","(561) 297-3000", 0,5, 13, "","Education","" ));
+		CityEventsList.add(new CityEvent("6","11/27/2014","1:00","Cinemark Palace 20 Movie Night", "3200 Airport Rd Boca Raton, FL 33431","(561) 395-4695", 0,5, 13, "","Enetertainment,fun","" ));
+		CityEventsList.add(new CityEvent("7","11/31/2014","2:00","University Woodlands Park", "University Woodlands Park, Boca Raton, FL 33434","954 205-1872", 10,5, 0, "","fun","" ));
+		CityEventsList.add(new CityEvent("8","11/17/2014","3:00","HAPPI Farm", "17800 SW 52nd Ct Southwest Ranches, FL 33331","(954) 629-8133", 1,4, 10, "","fun","" ));
+		CityEventsList.add(new CityEvent("9","11/18/2014","4:00","Naacp", "13230 NW 7th Ave North Miami, FL 33168","(305) 685-8694", 8,5, 18, "","fun","" ));
+		
+		//Length Test
+		CityEventsList.add(new CityEvent("10","12/12/2014","2:00","Engineering Graduation", "777 Glades Rd, Boca Raton, FL 33431","(561) 297-3000", 0,5, 13, "","Education","" ));
+		CityEventsList.add(new CityEvent("11","11/27/2014","1:00","Cinemark Palace 20 Movie Night", "3200 Airport Rd Boca Raton, FL 33431","(561) 395-4695", 0,5, 13, "","Enetertainment,fun","" ));
+		CityEventsList.add(new CityEvent("12","11/31/2014","2:00","University Woodlands Park", "University Woodlands Park, Boca Raton, FL 33434","954 205-1872", 10,5, 0, "","fun","" ));
+		CityEventsList.add(new CityEvent("13","11/17/2014","3:00","HAPPI Farm", "17800 SW 52nd Ct Southwest Ranches, FL 33331","(954) 629-8133", 1,4, 10, "","fun","" ));
+		CityEventsList.add(new CityEvent("14","11/18/2014","4:00","Naacp", "13230 NW 7th Ave North Miami, FL 33168","(305) 685-8694", 8,5, 18, "","fun","" ));*/
+		}catch(Exception e){
+			Log.e("Initilize Data",e.toString());
+		}
+		
+		try{
+			/*ReportsList.add(new ReportedArea("Police",5.0,"3400 Airport Rd Boca Raton, FL 33431",null,null));
+			ReportsList.add(new ReportedArea("Fire",30.0,"980 N Federal Hwy #200 Boca Raton, FL 33432",null,null));
+			ReportsList.add(new ReportedArea("Traffic",100.0,"5800 NW 2nd Ave Boca Raton, FL 33487",null,null));*/
 		}catch(Exception e){
 			Log.e("Initilize Data",e.toString());
 		}

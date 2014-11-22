@@ -9,10 +9,12 @@ import com.ade.cityville.adapters.NDExpandableListAdapter;
 
 import android.app.Activity;
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -120,11 +122,21 @@ public class NavigationDrawerFragment extends Fragment {
 						selectItem(position);
 						
 						switch(listDataHeader.get(position)){
-							case "About Us": //TODO: Create Intent and start the About Us activity
+							case "About Us":
+								//Displays an alert dialog box displying the group members
+								new AlertDialog.Builder(getActivity())
+							    .setTitle("About Us")
+							    .setMessage(getString(R.string.about_group))
+							    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+							        public void onClick(DialogInterface dialog, int which) { 
+							        }
+							     })
+							    .setIcon(R.drawable.ic_about)
+							     .show();
 								break;
 							case "Settings": //TODO: Create Intent and start the Settings activity
 								break;
-							case "Report": //TODO: Create Intent and start the Report activity
+							case "Report Area": //TODO: Create Intent and start the Report activity
 								break;
 						}
 					}

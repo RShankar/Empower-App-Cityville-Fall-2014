@@ -2,11 +2,18 @@ package com.ade.cityville;
 
 import java.net.InetAddress;
 
+import com.ade.cityville.listeners.*;
+import com.parse.Parse;
+import com.parse.ParseObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -15,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class InitializationActivity extends Activity {
 	private TextView tvProgress;
@@ -28,18 +36,30 @@ public class InitializationActivity extends Activity {
 		tvProgress = (TextView) findViewById(R.id.textViewProgress);
 		pb = (ProgressBar) findViewById(R.id.progressBar);
 		
+		//Checks if the GPS is enabled
+		ContentResolver contentResolver = this.getBaseContext().getContentResolver();
+		LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+		boolean gpsStatus = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);  
+		if (gpsStatus == false) {
+			Toast.makeText(this, "Please enable your gps settings", Toast.LENGTH_LONG).show();
+			Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);  
+				startActivity(gpsOptionsIntent);
+		}
+		
+		//Initialize periodic updates of location
+		LocationListener locationListener = new MyLocationListener(this);
+		lm.requestLocationUpdates(lm.GPS_PROVIDER, 1000*60*5, 6, locationListener);
+		
+		//Initialize Parse
+		 Parse.initialize(this, "qOkwubtF8mugPpjcf1RgaE3MfvNlkGNT58AlP70q", "qr41Q00Te0PfJ1KOlfz29olypPaNdKDxOvXwXAk3");
+		 checkParse();
 	}
 	
 	@Override
 	protected void onResume(){
 		super.onResume();
 		final Context c = this;
-		new Thread(new Runnable(){
-
-			@Override
-			public void run() {
-			
-				
+					
 				//done();
 		//Make sure everything is up and running
 		tvProgress.setText("Initializing...");
@@ -53,7 +73,7 @@ public class InitializationActivity extends Activity {
 			//All checks are a GO, finish up
 			done();
 		}else{}
-			}}).start();
+		
 	}
 
 	@Override
@@ -73,6 +93,11 @@ public class InitializationActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	public void checkParse(){
+		ParseObject testObject = new ParseObject("TestObject");
+		testObject.put("foo", "bar");
+		testObject.saveInBackground();
 	}
 	
 	public boolean presystemsCheck(){
@@ -107,8 +132,8 @@ public class InitializationActivity extends Activity {
 	}
 	
 	public void displayError(String title, String msg){
-		new AlertDialog.Builder(this)
-	    .setTitle(title)
+		final AlertDialog.Builder ad = new AlertDialog.Builder(this)
+		.setTitle(title)
 	    .setMessage(msg)
 	    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int which) { 
@@ -123,13 +148,21 @@ public class InitializationActivity extends Activity {
 	            // do nothing
 	        }
 	     })*/
-	    .setIcon(android.R.drawable.ic_dialog_alert)
-	     .show();
+	    .setIcon(android.R.drawable.ic_dialog_alert);
+		
+		runOnUiThread(new Runnable(){
+
+			@Override
+			public void run() {
+				ad.show();
+			}});
 	}
 	
 	public void done(){
 		pb.setProgress(pb.getMax());
 		
+		//TODO Change to Login Activity when done.
+		//Intent intent = new Intent(this, LoginActivity.class);
 		Intent intent = new Intent(this, HomeActivity.class);
 		startActivity(intent);
 	}
