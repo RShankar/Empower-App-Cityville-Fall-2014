@@ -15,7 +15,7 @@
         android:layout_marginTop="10dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" 
             android:orientation="horizontal">
 
@@ -29,9 +29,9 @@
             <Spinner
                 android:id="@+id/spinnerTypes"
                 android:layout_width="100dp"
-                android:layout_height="30dp"
+                android:layout_height="50dp"
                 android:layout_weight="1" 
-                android:layout_marginLeft="5dp"/>
+                />
 
         </LinearLayout>
 
@@ -52,15 +52,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:inputType="textPostalAddress" >
-
-                <requestFocus />
-            </EditText>
+                android:imeOptions="actionSearch"
+                android:inputType="textPostalAddress" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" 
             android:layout_marginTop="10dp">
 
@@ -77,10 +75,17 @@
                 android:layout_weight="1"
                 android:inputType="number" />
 
+            <Button
+                android:id="@+id/buttonRadius"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set Radius" />
+
         </LinearLayout>
 
         <fragment
-            android:id="@+id/mapHome"
+            android:id="@+id/mapReport"
             android:name="com.google.android.gms.maps.MapFragment"
             android:layout_width="match_parent"
             android:layout_height="240dp" 

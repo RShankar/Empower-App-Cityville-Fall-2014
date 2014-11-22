@@ -147,6 +147,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:imeOptions="actionSearch"
                 android:inputType="textPostalAddress" />
 
         </LinearLayout>
@@ -171,20 +172,20 @@
         </LinearLayout>
 
         <fragment
-            android:id="@+id/mapHome"
+            android:id="@+id/mapPost"
             android:name="com.google.android.gms.maps.MapFragment"
             android:layout_width="match_parent"
-            android:layout_height="100dp" 
+            android:layout_height="120dp" 
             android:layout_marginTop="10dp"/>
         
     </LinearLayout>
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/buttonPost"
         android:layout_below="@+id/LLMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button" 
+        android:text="Post" 
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"/>
 

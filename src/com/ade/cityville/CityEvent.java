@@ -137,11 +137,12 @@ public class CityEvent implements Parcelable{
 	 */
 	public void setDate(String date) {
 		this.date = date;
-		
+		if (time != null){
 		try {
 			datentime = stringToCalendar(getDate() + "T" + getTime(), TimeZone.getTimeZone("GMT -4:00"));
 		} catch (ParseException e) {
 			e.printStackTrace();
+		}
 		}
 	}
 
@@ -159,10 +160,12 @@ public class CityEvent implements Parcelable{
 	 */
 	public void setTime(String time) {
 		this.time = time;
+		if (date != null){
 		try {
-			datentime = stringToCalendar(getDate() + "T" + getTime(), TimeZone.getTimeZone("GMT -4:00"));
+			datentime = stringToCalendar(getDate() + "T" + time, TimeZone.getTimeZone("GMT -4:00"));
 		} catch (ParseException e) {
 			e.printStackTrace();
+		}
 		}
 	}
 

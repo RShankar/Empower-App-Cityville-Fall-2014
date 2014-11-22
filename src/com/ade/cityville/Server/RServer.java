@@ -31,6 +31,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.ade.cityville.AppData;
 import com.ade.cityville.CityEvent;
 import com.ade.cityville.R;
 import com.ade.cityville.ReportedArea;
@@ -143,6 +144,11 @@ public class RServer extends AsyncTask<Void, Void, String>{
 				}
 			}
 		});
+		
+		if (list.size() < 1){
+			return AppData.getCityEventsList();
+		}
+		
 		return list;
 	}
 	

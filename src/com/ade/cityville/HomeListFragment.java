@@ -1,6 +1,9 @@
 package com.ade.cityville;
 
+import com.ade.cityville.AppData.TrackerName;
 import com.ade.cityville.adapters.HomeEventListAdapter;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import android.app.Fragment;
 import android.content.Intent;
@@ -23,7 +26,7 @@ public class HomeListFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View vi = inflater.inflate(R.layout.fragment_home_list, container, false);
 		
-		
+		AppData.updateCityEvents();
 		lv_events = (ListView) vi.findViewById(R.id.listViewEvents);
 		
 		//If the ArrayList of CityEvents has something in it.
@@ -43,6 +46,19 @@ public class HomeListFragment extends Fragment {
 			//If there are no city events, display some image and text.
 		}
 		
+		// Get tracker.
+        Tracker t =  AppData.getTracker(TrackerName.APP_TRACKER);
+        
+        t.setScreenName("Home List View Activity");
+        
+        // Build and send an Event.
+        t.send(new HitBuilders.EventBuilder()
+            .setCategory("Activity")
+            .setAction("Loaded")
+            .setLabel("List View Loaded")
+            //.setValue(1)
+            .build());
+        
 		return vi;
 	}
 

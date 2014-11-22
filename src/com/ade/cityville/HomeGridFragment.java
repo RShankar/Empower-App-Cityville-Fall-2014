@@ -2,7 +2,10 @@ package com.ade.cityville;
 
 import java.util.ArrayList;
 
+import com.ade.cityville.AppData.TrackerName;
 import com.ade.cityville.Server.RServer;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import android.app.Fragment;
 import android.content.Intent;
@@ -28,11 +31,25 @@ public class HomeGridFragment extends Fragment implements OnClickListener, Filte
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		vi = inflater.inflate(R.layout.fragment_home_grid, container, false);
-		
+		AppData.updateCityEvents();
 		if (AppData.getCityEventsList() != null || AppData.getCityEventsList().size() > 0){
 			generateView(AppData.getCityEventsList());
 		}else{}
 		
+		
+		// Get tracker.
+        Tracker t =  AppData.getTracker(TrackerName.APP_TRACKER);
+        
+        t.setScreenName("Home Grid View Activity");
+        
+        // Build and send an Event.
+        t.send(new HitBuilders.EventBuilder()
+            .setCategory("Activity")
+            .setAction("Loaded")
+            .setLabel("Grid View Loaded")
+            //.setValue(1)
+            .build());
+        
 		return vi;
 	}
 

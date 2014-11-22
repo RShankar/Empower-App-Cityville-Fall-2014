@@ -3,6 +3,7 @@ package com.ade.cityville;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -14,6 +15,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.ade.cityville.Server.RServer;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -27,6 +30,14 @@ public class AppData {
 	public static boolean loggedIn = false;
 	private static boolean filtersActivated;
 
+	public enum TrackerName {
+	    APP_TRACKER, // Tracker used only in this app.
+	    GLOBAL_TRACKER, // Tracker used by all the apps from a company. eg: roll-up tracking.
+	    ECOMMERCE_TRACKER, // Tracker used by all ecommerce transactions from a company.
+	  }
+
+	public static HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
+	  
 	public static boolean initializeData(){
 		if (c == null){return false;}
 		//Set all the class context here
@@ -108,6 +119,32 @@ public class AppData {
 		return location;
 	}
 	
+	public static void updateCityEvents(){
+		try {
+			CityEventsList = RServer.getAllEvents();
+		} catch (Exception e) {
+			Log.e("Initilize City Events List", e.toString());
+		}
+	}
+	public static void updateReportedAreas(){
+		try{
+			ReportsList = RServer.getAllReportedAreas();
+		} catch (Exception e) {
+			Log.e("Initilize Reported Areas List", e.toString());
+		}
+	}
+	
+	static synchronized Tracker getTracker(TrackerName trackerId) {
+	    if (!mTrackers.containsKey(trackerId)) {
+
+	      GoogleAnalytics analytics = GoogleAnalytics.getInstance(c);
+	      Tracker t = (trackerId == TrackerName.APP_TRACKER) ? analytics.newTracker("UA-56663321-1"):
+	    	  analytics.newTracker("UA-56663321-1");
+	      mTrackers.put(trackerId, t);
+
+	    }
+	    return mTrackers.get(trackerId);
+	  }
 	/**
 	 * @return the cityEventsList
 	 */

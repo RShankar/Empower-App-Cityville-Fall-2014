@@ -3,6 +3,9 @@ package com.ade.cityville;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import com.ade.cityville.AppData.TrackerName;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
@@ -47,7 +50,7 @@ public class HomeMapFragment extends Fragment implements Filterable{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if (vi == null){}
 		vi = inflater.inflate(R.layout.fragment_home_map, container, false);
-		
+		AppData.updateCityEvents();
 		radiusIndicator = new CircleOptions();
 		
 		// Set the format for latitude and longitude
@@ -62,7 +65,19 @@ public class HomeMapFragment extends Fragment implements Filterable{
         // Localize the pattern
         mRadiusFormat.applyLocalizedPattern(mRadiusFormat.toLocalizedPattern());
         
-       
+     // Get tracker.
+        Tracker t =  AppData.getTracker(TrackerName.APP_TRACKER);
+        
+        t.setScreenName("Home Map View Activity");
+        
+        // Build and send an Event.
+        t.send(new HitBuilders.EventBuilder()
+            .setCategory("Activity")
+            .setAction("Loaded")
+            .setLabel("Map View Loaded")
+            //.setValue(1)
+            .build());
+        
 		return vi;
 	}
 
