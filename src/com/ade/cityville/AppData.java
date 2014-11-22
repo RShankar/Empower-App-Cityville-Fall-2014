@@ -25,6 +25,7 @@ public class AppData {
 	private static Location currentLocation;
 	private static Context c;
 	public static boolean loggedIn = false;
+	private static boolean filtersActivated;
 
 	public static boolean initializeData(){
 		if (c == null){return false;}
@@ -732,6 +733,20 @@ public class AppData {
 			}
 			default: return R.drawable.ic_launcher;	
 		}
+	}
+
+	/**
+	 * @return the filtersActivated
+	 */
+	public static boolean isFiltersActivated() {
+		return filtersActivated;
+	}
+
+	/**
+	 * @param filtersActivated the filtersActivated to set
+	 */
+	public static void setFiltersActivated(boolean filtersActivated) {
+		AppData.filtersActivated = filtersActivated;
 	}
 	
 }

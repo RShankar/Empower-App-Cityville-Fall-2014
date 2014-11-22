@@ -69,11 +69,10 @@
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register" >
         </activity>
-        
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/app_name" 
-            android:screenOrientation="portrait">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".EventFilterActivity"
@@ -82,13 +81,22 @@
         </activity>
         <activity
             android:name=".ThemesActivity"
-            android:label="@string/app_name" 
-            android:screenOrientation="portrait">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".AgeRestrictionsActivity"
-            android:label="@string/app_name" 
-            android:screenOrientation="portrait">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ReportAreaActivity"
+            android:label="@string/title_activity_report_area"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".PostEventActivity"
+            android:label="@string/title_activity_post_event" >
         </activity>
     </application>
 

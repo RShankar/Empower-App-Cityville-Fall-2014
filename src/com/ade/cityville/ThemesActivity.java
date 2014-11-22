@@ -1,4 +1,4 @@
-package com.example.settings;
+package  com.ade.cityville;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;

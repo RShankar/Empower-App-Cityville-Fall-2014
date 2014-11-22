@@ -13,7 +13,7 @@
     <!-- Left (Start) Navigation Drawer -->
     <string-array name="nav_tabs">
         <item>Home</item>
-        <item >Post Event</item>
+        <item>Post Event</item>
         <item>Report Area</item>
         <item>About Us</item>
         <item>Settings</item>
@@ -45,6 +45,12 @@
         <item>17+</item>
         <item>18+</item>
     </string-array>
+    <string-array name="report_types">
+        <item>Police</item>
+        <item>Fire</item>
+        <item>Traffic</item>
+        <item>Other</item>
+    </string-array>
 
     <!-- Navigation Drawer for Home Activity -->
     <string name="title_section1">Home</string>
@@ -56,16 +62,14 @@
 
     <!-- ActionBar -->
     <string name="search_title">Search Events</string>
-	
+
     <!-- About Us -->
-    <string name="about_group">
-	    Cityville
+    <string name="about_group">	    Cityville
 	    \nDeveloped by:
 	    	\n\t> Alain Edwards
 	    	\n\t> Adam	Moulton
-	    	\n\t> Lance	Williams
-	</string>
-	
+	    	\n\t> Lance	Williams</string>
+
     <!-- Misc -->
     <string name="server_address">http://lamp.cse.fau.edu/~aedwar50</string>
     <string name="image_server_address">http://lamp.cse.fau.edu/~aedwar50/Cityville/images/</string>
@@ -78,10 +82,10 @@
     <!-- Number patterns -->
     <string name="lat_lng_pattern">* ###.00000000;* -###.00000000</string>
     <string name="radius_pattern">* #.0000</string>
-    
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_async_task_complete_listener">AsyncTaskCompleteListener</string>
     <string name="title_activity_register">Register</string>
+    <string name="title_activity_report_area">Report Area</string>
+    <string name="title_activity_post_event">Post Event</string>
 
-    
 </resources>

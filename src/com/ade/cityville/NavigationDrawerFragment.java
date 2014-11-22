@@ -15,6 +15,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -134,9 +135,17 @@ public class NavigationDrawerFragment extends Fragment {
 							    .setIcon(R.drawable.ic_about)
 							     .show();
 								break;
-							case "Settings": //TODO: Create Intent and start the Settings activity
+							case "Settings": 
+								Intent intent = new Intent(getActivity(), SettingsActivity.class);
+								startActivity(intent);
 								break;
-							case "Report Area": //TODO: Create Intent and start the Report activity
+							case "Report Area":
+								Intent intentr = new Intent(getActivity(), ReportAreaActivity.class);
+								startActivity(intentr);
+								break;
+							case "Post Event":
+								Intent intentp = new Intent(getActivity(), PostEventActivity.class);
+								startActivity(intentp);
 								break;
 						}
 					}
@@ -182,6 +191,33 @@ public class NavigationDrawerFragment extends Fragment {
 		        Toast.makeText(getActivity(),
 		                listDataHeader.get(groupPosition) + " Expanded",
 		                Toast.LENGTH_SHORT).show();
+		        switch(listDataHeader.get(groupPosition)){
+				case "About Us":
+					//Displays an alert dialog box displying the group members
+					new AlertDialog.Builder(getActivity())
+				    .setTitle("About Us")
+				    .setMessage(getString(R.string.about_group))
+				    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+				        public void onClick(DialogInterface dialog, int which) { 
+				        }
+				     })
+				    .setIcon(R.drawable.ic_about)
+				     .show();
+					break;
+				case "Settings": 
+					Intent intent = new Intent(getActivity(), SettingsActivity.class);
+					startActivity(intent);
+					break;
+				case "Report Area":
+					Intent intentr = new Intent(getActivity(), ReportAreaActivity.class);
+					startActivity(intentr);
+					break;
+				case "Post Event":
+					Intent intentp = new Intent(getActivity(), PostEventActivity.class);
+					startActivity(intentp);
+					break;
+			}
+		
 		    }
 		});
 		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);

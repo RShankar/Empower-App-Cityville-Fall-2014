@@ -1,4 +1,4 @@
-package com.example.settings;
+package com.ade.cityville;
 
 import android.app.Activity;
 import android.os.Bundle;

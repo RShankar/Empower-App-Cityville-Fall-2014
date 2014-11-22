@@ -1,4 +1,4 @@
-package com.example.settings;
+package  com.ade.cityville;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -40,8 +40,8 @@ public class SettingsActivity extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				AppData.setfiltersActivated(isChecked);
-				
+				AppData.setFiltersActivated(isChecked);
+				filters.setEnabled(isChecked);
 			}});
         
     }
@@ -70,26 +70,16 @@ public class SettingsActivity extends Activity {
     public void goToTheme(View v){                  //Launches ThemesActivity 
     	Intent intent = new Intent(SettingsActivity.this, ThemesActivity.class);
     	startActivity(intent);
-    
     }
     
     public void goToFilters(View v){                //Launches EventFilterActivity
     	Intent intent = new Intent(SettingsActivity.this,EventFilterActivity.class);
     	startActivity(intent);
-    	
     }
     
     public void goToRestrictions(View v){			//Launches AgeRestrictionsActivity
     	Intent intent = new Intent(SettingsActivity.this,AgeRestrictionsActivity.class);
     	startActivity(intent);
-    	
     }
-    
-    public void checkFilter(View v){                
-    	
-    	
-    	
-    }
-    
     
 }
