@@ -15,10 +15,12 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
@@ -52,6 +54,7 @@ public class PostEventActivity extends Activity {
 	private EditText etName, etDate, etTime, etPNumber, 
 	etCost, etAge, etAddress, etDescription;
 	private Button btnPost;
+	ProgressDialog dialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +90,7 @@ public class PostEventActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
+				SoundManager.playSound(6, 1);
 				if (validate() == true){
 					if (postEvent(v)){
 						AppData.updateCityEvents();
@@ -216,13 +220,15 @@ public class PostEventActivity extends Activity {
 	}
 	
 	public boolean postEvent(View v){
+		dialog = ProgressDialog.show(this, "","Processing Request, Please Wait...", true);
+		
 		ParseObject newCityEvent = new ParseObject("CityEvent");
 		newCityEvent.put("name", etName.getText().toString());
 		newCityEvent.put("date", etDate.getText().toString());
 		newCityEvent.put("time", etTime.getText().toString());
 		newCityEvent.put("phonenumber", etPNumber.getText().toString());
-		newCityEvent.put("cost", etCost.getText().toString());
-		newCityEvent.put("age", etAge.getText().toString());
+		newCityEvent.put("cost", Float.parseFloat(etCost.getText().toString()));
+		newCityEvent.put("age", Integer.parseInt(etAge.getText().toString()));
 		newCityEvent.put("rating", 0);
 		newCityEvent.put("address", etAddress.getText().toString());
 		newCityEvent.put("description", etDescription.getText().toString());
@@ -232,8 +238,17 @@ public class PostEventActivity extends Activity {
 			newCityEvent.put("longitude", currentMarker.getPosition().longitude);
 		}
 		newCityEvent.saveInBackground();
+		try {
+			newCityEvent.save();
+		} catch (ParseException e) {
+			Log.e("Parse - Post Event", e.toString());
+			dialog.dismiss();
+			Toast.makeText(this, "Post event unsuccessful, Please try again later.", Toast.LENGTH_LONG).show();
+			return false;	
+		}
 		
-		Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
+		dialog.dismiss();
+		Toast.makeText(this, "Success!", Toast.LENGTH_LONG).show();
 		return true;
 	}
 	

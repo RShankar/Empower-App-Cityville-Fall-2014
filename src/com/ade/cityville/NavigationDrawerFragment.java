@@ -120,20 +120,11 @@ public class NavigationDrawerFragment extends Fragment {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
+						SoundManager.playSound(6, 1);
 						selectItem(position);
-						
 						switch(listDataHeader.get(position)){
 							case "About Us":
-								//Displays an alert dialog box displying the group members
-								new AlertDialog.Builder(getActivity())
-							    .setTitle("About Us")
-							    .setMessage(getString(R.string.about_group))
-							    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-							        public void onClick(DialogInterface dialog, int which) { 
-							        }
-							     })
-							    .setIcon(R.drawable.ic_about)
-							     .show();
+								startActivity(new Intent(getActivity(), ImageButton.class));
 								break;
 							case "Settings": 
 								Intent intent = new Intent(getActivity(), SettingsActivity.class);
@@ -163,14 +154,15 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                     int groupPosition, int childPosition, long id) {
-                Toast.makeText(
+        		SoundManager.playSound(6, 1);
+                /*Toast.makeText(
                         getActivity(),
                         listDataHeader.get(groupPosition)
                                 + " : "
                                 + listDataChild.get(
                                         listDataHeader.get(groupPosition)).get(
                                         childPosition), Toast.LENGTH_SHORT)
-                        .show();
+                        .show();*/
                 switch(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition)){
                 	case "Grid View": ((HomeActivity) getActivity()).showGridView();
                 		break;
@@ -188,21 +180,13 @@ public class NavigationDrawerFragment extends Fragment {
 			 
 		    @Override
 		    public void onGroupExpand(int groupPosition) {
-		        Toast.makeText(getActivity(),
+				SoundManager.playSound(6, 1);
+		        /*Toast.makeText(getActivity(),
 		                listDataHeader.get(groupPosition) + " Expanded",
-		                Toast.LENGTH_SHORT).show();
+		                Toast.LENGTH_SHORT).show();*/
 		        switch(listDataHeader.get(groupPosition)){
 				case "About Us":
-					//Displays an alert dialog box displying the group members
-					new AlertDialog.Builder(getActivity())
-				    .setTitle("About Us")
-				    .setMessage(getString(R.string.about_group))
-				    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-				        public void onClick(DialogInterface dialog, int which) { 
-				        }
-				     })
-				    .setIcon(R.drawable.ic_about)
-				     .show();
+					startActivity(new Intent(getActivity(), ImageButton.class));
 					break;
 				case "Settings": 
 					Intent intent = new Intent(getActivity(), SettingsActivity.class);

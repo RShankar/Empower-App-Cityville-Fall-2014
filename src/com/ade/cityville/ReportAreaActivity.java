@@ -14,10 +14,12 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -58,6 +60,7 @@ public class ReportAreaActivity extends Activity {
 	private EditText etAddress, etRadius;
 	private Button btnReport, btnRadius;
 	private double radius;
+	ProgressDialog dialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +128,7 @@ public class ReportAreaActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
+				SoundManager.playSound(6, 1);
 				if (etRadius.getText().toString().equals("") || etRadius.getText().toString().equalsIgnoreCase(" ") || etRadius.getText() == null){
 					radius = 0;
 					setRadius();
@@ -138,6 +142,7 @@ public class ReportAreaActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
+				SoundManager.playSound(6, 1);
 				if (validate() == true){
 					if (postReport(v)){
 						AppData.updateReportedAreas();
@@ -156,17 +161,26 @@ public class ReportAreaActivity extends Activity {
 	}
 
 	protected boolean postReport(View v) {
+		dialog = ProgressDialog.show(this, "","Processing Request, Please Wait...", true);
 		ParseObject newReportedArea = new ParseObject("ReportedArea");
 		newReportedArea.put("type", spinTypes.getSelectedItem().toString());
 		newReportedArea.put("address", etAddress.getText().toString());
 		newReportedArea.put("radius", Double.parseDouble(etRadius.getText().toString()));
 		
 		if (currentMarker != null){
-			newReportedArea.put("latitude", currentMarker.getPosition().latitude);
-			newReportedArea.put("longitude", currentMarker.getPosition().longitude);
+			newReportedArea.put("latitude", ""+currentMarker.getPosition().latitude);
+			newReportedArea.put("longitude", ""+currentMarker.getPosition().longitude);
 		}
-		newReportedArea.saveInBackground();
 		
+		//newReportedArea.saveInBackground();
+		try {
+			newReportedArea.save();
+		} catch (ParseException e) {
+			Log.e("Parse - Report Area", e.toString());
+			dialog.dismiss();
+			return false;
+		}
+		dialog.dismiss();
 		Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
 		return true;
 	}
@@ -269,6 +283,10 @@ public class ReportAreaActivity extends Activity {
 				}else if (type.equalsIgnoreCase("traffic")){
 					shadeColor = 0x88FF9933;
 					strokeColor = 0xFFFF6600;
+				}
+				else if (type.equalsIgnoreCase("other")){
+					shadeColor = 0x88DCDCDC;
+					strokeColor = 0xFFA9A9A9;
 				}
 				
 				/*if (radiusUnits.getSelectedItem().equals("ft")){

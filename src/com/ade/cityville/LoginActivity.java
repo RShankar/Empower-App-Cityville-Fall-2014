@@ -94,9 +94,10 @@ public class LoginActivity extends Activity implements AsyncTaskCompleteListener
 	   }
 	}
 	private void loginSuccessful(){
-		Toast.makeText(getApplicationContext(), "Your Logged In!", Toast.LENGTH_SHORT).show();
+		Toast.makeText(getApplicationContext(), "You're Logged In!", Toast.LENGTH_LONG).show();
 
 		AppData.loggedIn = true;
+		AppData.email = email.getText().toString();
 		Intent intent = new Intent(this, HomeActivity.class);
 		startActivity(intent);
 	}

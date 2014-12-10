@@ -16,13 +16,13 @@
         <item>Post Event</item>
         <item>Report Area</item>
         <item>About Us</item>
-        <item>Settings</item>
+        <!-- <item>Settings</item> -->
     </string-array>
     <string-array name="home_tabs">
         <item>Grid View</item>
         <item>Map View</item>
         <item>List View</item>
-        <item>Favorites</item>
+        <!-- <item>Favorites</item> -->
     </string-array>
 
     <!-- Left (Start) Navigation Drawer -->
@@ -74,18 +74,19 @@
     <string name="server_address">http://lamp.cse.fau.edu/~aedwar50</string>
     <string name="image_server_address">http://lamp.cse.fau.edu/~aedwar50/Cityville/images/</string>
     <string name="db_address">http://lamp.cse.fau.edu/~aedwar50/Cityville/cmd.php</string>
-    <string name="title_activity_home_grid">HomeGridActivity</string>
-    <string name="title_activity_home_list">HomeListActivity</string>
-    <string name="title_activity_home_map">HomeMapActivity</string>
-    <string name="title_activity_city_event">CityEventActivity</string>
+    <string name="title_activity_home_grid">Home: Grid</string>
+    <string name="title_activity_home_list">Home: List</string>
+    <string name="title_activity_home_map">Home: Map</string>
+    <string name="title_activity_city_event">City Event</string>
 
     <!-- Number patterns -->
     <string name="lat_lng_pattern">* ###.00000000;* -###.00000000</string>
     <string name="radius_pattern">* #.0000</string>
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_login">Login</string>
     <string name="title_activity_async_task_complete_listener">AsyncTaskCompleteListener</string>
     <string name="title_activity_register">Register</string>
     <string name="title_activity_report_area">Report Area</string>
     <string name="title_activity_post_event">Post Event</string>
+    <string name="title_activity_image_button">ImageButton</string>
 
 </resources>

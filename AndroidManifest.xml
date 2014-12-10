@@ -38,13 +38,20 @@
             android:value="AIzaSyDcIzQ0QTnsDWk417f6hsG0U0unFRmClcc" />
 
         <activity
+            android:name=".ImageButton"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.NoTitleBar" >
+            
+        </activity>
+        <activity
             android:name=".InitializationActivity"
             android:label="@string/app_name"
             android:noHistory="true"
             android:theme="@android:style/Theme.NoTitleBar" >
+            
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -59,15 +66,18 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login" >
+            android:label="@string/title_activity_login"
+            android:noHistory="true" >
         </activity>
         <activity
             android:name=".AsyncTaskCompleteListener"
-            android:label="@string/title_activity_async_task_complete_listener" >
+            android:label="@string/title_activity_async_task_complete_listener"
+            android:noHistory="true" >
         </activity>
         <activity
             android:name=".RegisterActivity"
-            android:label="@string/title_activity_register" >
+            android:label="@string/title_activity_register"
+            android:noHistory="true" >
         </activity>
         <activity
             android:name=".SettingsActivity"

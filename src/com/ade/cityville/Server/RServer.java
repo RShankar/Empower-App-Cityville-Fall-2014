@@ -104,7 +104,7 @@ public class RServer extends AsyncTask<Void, Void, String>{
 	
 	public static ArrayList<CityEvent> getAllEvents() throws NumberFormatException, ParseException, IOException, JSONException{
 		if (c == null){return null;}
-		final ArrayList<CityEvent> list = new ArrayList<CityEvent>();
+		ArrayList<CityEvent> list = new ArrayList<CityEvent>();
 		/*String serverResponse = sendCMD("le");
 		if (serverResponse != null && !(serverResponse.equalsIgnoreCase("")) && !(serverResponse.equalsIgnoreCase(" ")) && serverResponse.length() > 0){
 			String[] events = serverResponse.split("+|+");
@@ -121,8 +121,32 @@ public class RServer extends AsyncTask<Void, Void, String>{
 		}*/
 		
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("CityEvent");
+		try {
+			List<ParseObject> qlist = query.find();
+			
+			for(ParseObject object: qlist){
+				CityEvent ce = new CityEvent();
+				ce.setName(object.getString("name"));
+				ce.setAddress(object.getString("address"));
+				ce.setAge(object.getInt("age"));
+				ce.setId(object.getObjectId());
+				ce.setCost(object.getDouble("cost"));
+				ce.setDate(object.getString("date"));
+				ce.setTime(object.getString("time"));
+				ce.setPhonenumber(object.getString("phonenumber"));
+				ce.setRating(object.getDouble("rating"));
+				ce.setDescription(object.getString("description"));
+				ce.setImg(object.getString("img"));
+				ce.setTags(object.getString("tags"));
+				list.add(ce);
+			}
+		} catch (com.parse.ParseException e) {
+			e.printStackTrace();
+		}
 		
-		query.findInBackground(new FindCallback<ParseObject>() {
+		
+
+		/*query.find(new FindCallback<ParseObject>() {
 			@Override
 			public void done(List<ParseObject> objects,
 					com.parse.ParseException e) {
@@ -143,7 +167,7 @@ public class RServer extends AsyncTask<Void, Void, String>{
 					list.add(ce);
 				}
 			}
-		});
+		});*/
 		
 		if (list.size() < 1){
 			return AppData.getCityEventsList();
@@ -156,8 +180,27 @@ public class RServer extends AsyncTask<Void, Void, String>{
 		final  ArrayList<ReportedArea> list = new  ArrayList<ReportedArea>();
 		
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("ReportedArea");
+		List<ParseObject> qlist;
+		try {
+			qlist = query.find();
+			
+			for(ParseObject object: qlist){
+				ReportedArea ra = new ReportedArea();
+				ra.setType(object.getString("type"));
+				ra.setId(object.getObjectId());
+				ra.setAddress(object.getString("address"));
+				ra.setRadius(object.getDouble("radius"));
+				ra.setLatitude(object.getString("latitude"));
+				ra.setLongitude(object.getString("longitude"));
+				list.add(ra);
+			}
+		} catch (com.parse.ParseException e) {
+			e.printStackTrace();
+		}
 		
-		query.findInBackground(new FindCallback<ParseObject>() {
+		
+		
+		/*query.findInBackground(new FindCallback<ParseObject>() {
 			@Override
 			public void done(List<ParseObject> objects,
 					com.parse.ParseException e) {
@@ -172,8 +215,11 @@ public class RServer extends AsyncTask<Void, Void, String>{
 					list.add(ra);
 				}
 			}
-		});
+		});*/
 		
+		if (list.size() < 1){
+			return AppData.getReportsList();
+		}
 		return list;
 	}
 	public static Bitmap getImg(String aurl){

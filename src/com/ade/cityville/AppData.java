@@ -28,6 +28,9 @@ public class AppData {
 	private static Location currentLocation;
 	private static Context c;
 	public static boolean loggedIn = false;
+	private static boolean educationFilterActivated, communityFilterActivated, entertainmentFilterActivated, familyFilterActivated, musicFilterActivated, foodFilterActivated;
+	private static int currentAgeRestriction;
+	public static String email;
 	private static boolean filtersActivated;
 
 	public enum TrackerName {
@@ -42,6 +45,14 @@ public class AppData {
 		if (c == null){return false;}
 		//Set all the class context here
 		RServer.setContext(c);
+		
+		//Initialize Data here
+		educationFilterActivated = true;
+		communityFilterActivated = true;
+		entertainmentFilterActivated = true;
+		familyFilterActivated = true;
+		musicFilterActivated = true; 
+		foodFilterActivated = true;
 		
 		
 		try {
@@ -58,7 +69,8 @@ public class AppData {
 		
 		try{
 		//TODO Remove on release
-		/*CityEventsList.add(new CityEvent("0","11/14/2014","12:00","Cleanup the park", "901 NW 178th Ave Pembroke Pines, FL 33029","954 205-1872", 0,5, 13, "","fun","1.png" ));
+		/*
+		CityEventsList.add(new CityEvent("0","11/14/2014","12:00","Cleanup the park", "901 NW 178th Ave Pembroke Pines, FL 33029","954 205-1872", 0,5, 13, "Picking up garbage is fun, YEAH!!!","fun","1.png" ));
 		CityEventsList.add(new CityEvent("1","11/15/2014","1:00","Rose G Price Park", "901 NW 208th Ave , Hollywood, FL 33029","954 205-1872", 0,5, 13, "","fun","" ));
 		CityEventsList.add(new CityEvent("2","11/16/2014","2:00","Frontier Trails Park", "Southwest Ranches, FL 33332","954 205-1872", 10,5, 0, "","fun","" ));
 		CityEventsList.add(new CityEvent("3","11/17/2014","3:00","HAPPI Farm", "17800 SW 52nd Ct Southwest Ranches, FL 33331","(954) 629-8133", 1,4, 10, "","fun","" ));
@@ -75,7 +87,8 @@ public class AppData {
 		CityEventsList.add(new CityEvent("11","11/27/2014","1:00","Cinemark Palace 20 Movie Night", "3200 Airport Rd Boca Raton, FL 33431","(561) 395-4695", 0,5, 13, "","Enetertainment,fun","" ));
 		CityEventsList.add(new CityEvent("12","11/31/2014","2:00","University Woodlands Park", "University Woodlands Park, Boca Raton, FL 33434","954 205-1872", 10,5, 0, "","fun","" ));
 		CityEventsList.add(new CityEvent("13","11/17/2014","3:00","HAPPI Farm", "17800 SW 52nd Ct Southwest Ranches, FL 33331","(954) 629-8133", 1,4, 10, "","fun","" ));
-		CityEventsList.add(new CityEvent("14","11/18/2014","4:00","Naacp", "13230 NW 7th Ave North Miami, FL 33168","(305) 685-8694", 8,5, 18, "","fun","" ));*/
+		CityEventsList.add(new CityEvent("14","11/18/2014","4:00","Naacp", "13230 NW 7th Ave North Miami, FL 33168","(305) 685-8694", 8,5, 18, "","fun","" ));
+		//*/
 		}catch(Exception e){
 			Log.e("Initilize Data",e.toString());
 		}
@@ -145,6 +158,54 @@ public class AppData {
 	    }
 	    return mTrackers.get(trackerId);
 	  }
+	public static boolean checkAgeRestriction(CityEvent ce){
+		if (ce.getAge() < currentAgeRestriction){
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean checkFilters(CityEvent ce){
+		if (educationFilterActivated == true){
+			if (checkEventFilters("education",ce) == false){
+				return false;
+			}
+		}
+		if (communityFilterActivated == true){
+			if (checkEventFilters("community",ce) == false){
+				return false;
+			}
+		}
+		if (entertainmentFilterActivated == true){
+			if (checkEventFilters("entertainment",ce) == false){
+				return false;
+			}
+		}
+		if (familyFilterActivated == true){
+			if (checkEventFilters("family",ce) == false){
+				return false;
+			}
+		}
+		if (musicFilterActivated == true){
+			if (checkEventFilters("music",ce) == false){
+				return false;
+			}
+		}
+		if (foodFilterActivated == true){
+			if (checkEventFilters("food",ce) == false){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static boolean checkEventFilters(String filter, CityEvent ce){
+		
+		if (ce.getTags().contains(filter)){
+			return true;
+		}
+		return false;
+	}
 	/**
 	 * @return the cityEventsList
 	 */
@@ -784,6 +845,105 @@ public class AppData {
 	 */
 	public static void setFiltersActivated(boolean filtersActivated) {
 		AppData.filtersActivated = filtersActivated;
+	}
+
+	/**
+	 * @return the educationFilterActivated
+	 */
+	public static boolean isEducationFilterActivated() {
+		return educationFilterActivated;
+	}
+
+	/**
+	 * @param educationFilterActivated the educationFilterActivated to set
+	 */
+	public static void setEducationFilterActivated(boolean educationFilterActivated) {
+		AppData.educationFilterActivated = educationFilterActivated;
+	}
+
+	/**
+	 * @return the communityFilterActivated
+	 */
+	public static boolean isCommunityFilterActivated() {
+		return communityFilterActivated;
+	}
+
+	/**
+	 * @param communityFilterActivated the communityFilterActivated to set
+	 */
+	public static void setCommunityFilterActivated(boolean communityFilterActivated) {
+		AppData.communityFilterActivated = communityFilterActivated;
+	}
+
+	/**
+	 * @return the entertainmentFilterActivated
+	 */
+	public static boolean isEntertainmentFilterActivated() {
+		return entertainmentFilterActivated;
+	}
+
+	/**
+	 * @param entertainmentFilterActivated the entertainmentFilterActivated to set
+	 */
+	public static void setEntertainmentFilterActivated(
+			boolean entertainmentFilterActivated) {
+		AppData.entertainmentFilterActivated = entertainmentFilterActivated;
+	}
+
+	/**
+	 * @return the familyFilterActivated
+	 */
+	public static boolean isFamilyFilterActivated() {
+		return familyFilterActivated;
+	}
+
+	/**
+	 * @param familyFilterActivated the familyFilterActivated to set
+	 */
+	public static void setFamilyFilterActivated(boolean familyFilterActivated) {
+		AppData.familyFilterActivated = familyFilterActivated;
+	}
+
+	/**
+	 * @return the musicFilterActivated
+	 */
+	public static boolean isMusicFilterActivated() {
+		return musicFilterActivated;
+	}
+
+	/**
+	 * @param musicFilterActivated the musicFilterActivated to set
+	 */
+	public static void setMusicFilterActivated(boolean musicFilterActivated) {
+		AppData.musicFilterActivated = musicFilterActivated;
+	}
+
+	/**
+	 * @return the foodFilterActivated
+	 */
+	public static boolean isFoodFilterActivated() {
+		return foodFilterActivated;
+	}
+
+	/**
+	 * @param foodFilterActivated the foodFilterActivated to set
+	 */
+	public static void setFoodFilterActivated(boolean foodFilterActivated) {
+		AppData.foodFilterActivated = foodFilterActivated;
+	}
+
+	/**
+	 * @return the currentAgeRestriction
+	 */
+	public static int getCurrentAgeRestriction() {
+		return currentAgeRestriction;
+	}
+
+	/**
+	 * @param currentAgeRestriction the currentAgeRestriction to set
+	 */
+	public static void setCurrentAgeRestriction(int currentAgeRestriction) {
+		AppData.currentAgeRestriction = currentAgeRestriction;
 	}
 	
 }

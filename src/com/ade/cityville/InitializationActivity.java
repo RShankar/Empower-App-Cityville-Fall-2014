@@ -27,6 +27,7 @@ import android.widget.Toast;
 public class InitializationActivity extends Activity {
 	private TextView tvProgress;
 	private ProgressBar pb;
+	private static LocationManager lm;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,44 +37,52 @@ public class InitializationActivity extends Activity {
 		tvProgress = (TextView) findViewById(R.id.textViewProgress);
 		pb = (ProgressBar) findViewById(R.id.progressBar);
 		
-		//Checks if the GPS is enabled
-		ContentResolver contentResolver = this.getBaseContext().getContentResolver();
-		LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-		boolean gpsStatus = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);  
-		if (gpsStatus == false) {
-			Toast.makeText(this, "Please enable your gps settings", Toast.LENGTH_LONG).show();
-			Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);  
-				startActivity(gpsOptionsIntent);
-		}
-		
-		//Initialize periodic updates of location
-		LocationListener locationListener = new MyLocationListener(this);
-		lm.requestLocationUpdates(lm.GPS_PROVIDER, 1000*60*5, 6, locationListener);
-		
 		//Initialize Parse
 		 Parse.initialize(this, "qOkwubtF8mugPpjcf1RgaE3MfvNlkGNT58AlP70q", "qr41Q00Te0PfJ1KOlfz29olypPaNdKDxOvXwXAk3");
 		 checkParse();
+		 
+		//Initialize all local variables
+		AppData.setContext(this);
+		if (AppData.initializeData()){pb.setProgress((int) (pb.getMax() * 0.80));}
+		else{displayError("Server Error", "We were unable to get a list of events from our servers, please try again later.");}
+		
+		//Initialize periodic updates of location
+		LocationListener locationListener = new MyLocationListener(this);
+		lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+		lm.requestLocationUpdates(lm.GPS_PROVIDER, 1000*60*5, 6, locationListener);
+		
+		
+		
 	}
 	
 	@Override
 	protected void onResume(){
 		super.onResume();
 		final Context c = this;
-					
-				//done();
-		//Make sure everything is up and running
-		tvProgress.setText("Initializing...");
-		if (presystemsCheck()){
-			tvProgress.setText("Initializing local vars...");
-			//Initialize all local variables
-			AppData.setContext(c);
-			if (AppData.initializeData()){pb.setProgress((int) (pb.getMax() * 0.80));}
-			else{displayError("Server Error", "We were unable to get a list of events from our servers, please try again later.");}
-			
-			//All checks are a GO, finish up
-			done();
-		}else{}
 		
+		new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				tvProgress.setText("Initializing...");
+				
+				//Checks if the GPS is enabled
+				ContentResolver contentResolver = AppData.getContext().getContentResolver();
+				boolean gpsStatus = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);  
+				if (gpsStatus == false) {
+					Toast.makeText(AppData.getContext(), "Please enable your gps settings", Toast.LENGTH_LONG).show();
+					Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);  
+						startActivity(gpsOptionsIntent);
+				}
+				 
+				//Make sure everything is up and running
+				if (presystemsCheck()){
+					tvProgress.setText("Initializing local vars...");
+					//All checks are a GO, finish up
+					done();
+				}else{}
+				
+			}}).start();
 	}
 
 	@Override
@@ -160,10 +169,15 @@ public class InitializationActivity extends Activity {
 	
 	public void done(){
 		pb.setProgress(pb.getMax());
-		
-		//TODO Change to Login Activity when done.
-		//Intent intent = new Intent(this, LoginActivity.class);
-		Intent intent = new Intent(this, HomeActivity.class);
+		Intent intent;
+		intent = new Intent(this, HomeActivity.class);
+		//*uncomment on release
+		if(AppData.loggedIn){
+			intent = new Intent(this, HomeActivity.class);
+		} else {
+			intent = new Intent(this, LoginActivity.class);
+		}
+		//*/
 		startActivity(intent);
 	}
 }

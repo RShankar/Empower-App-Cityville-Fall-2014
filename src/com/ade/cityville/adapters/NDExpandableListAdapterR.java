@@ -16,11 +16,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
+import com.ade.cityville.AppData;
 import com.ade.cityville.R;
 
 /**
@@ -70,6 +73,62 @@ public class NDExpandableListAdapterR extends BaseExpandableListAdapter{
         if (groupPosition == 0){
         	CheckBox cb = (CheckBox) convertView.findViewById(R.id.checkBoxEventFilter);
         	cb.setText(childText);
+        	switch(childText){
+        		case "Education":
+        			cb.setChecked(AppData.isEducationFilterActivated());
+        			cb.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+
+						@Override
+						public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+							AppData.setEducationFilterActivated(isChecked);
+						}});
+        			break;
+        		case "Community":
+        			cb.setChecked(AppData.isCommunityFilterActivated());
+        			cb.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+
+						@Override
+						public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+							AppData.setCommunityFilterActivated(isChecked);
+						}});
+            		break;
+        		case "Entertainment":
+        			cb.setChecked(AppData.isEntertainmentFilterActivated());
+        			cb.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+
+						@Override
+						public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+							AppData.setEntertainmentFilterActivated(isChecked);
+						}});
+            		break;
+        		case "Family":
+        			cb.setChecked(AppData.isFamilyFilterActivated());
+        			cb.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+
+						@Override
+						public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+							AppData.setFamilyFilterActivated(isChecked);
+						}});
+            		break;
+        		case "Music":
+        			cb.setChecked(AppData.isMusicFilterActivated());
+        			cb.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+
+						@Override
+						public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+							AppData.setMusicFilterActivated(isChecked);
+						}});
+            		break;
+        		case "Food":
+        			cb.setChecked(AppData.isFoodFilterActivated());
+        			cb.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+
+						@Override
+						public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+							AppData.setFoodFilterActivated(isChecked);
+						}});
+            		break;
+        	}
         }
         else if (groupPosition == 1){
         	Spinner spin = (Spinner) convertView.findViewById(R.id.spinnerAGE);
@@ -81,7 +140,23 @@ public class NDExpandableListAdapterR extends BaseExpandableListAdapter{
         		spin.setOnItemSelectedListener(new OnItemSelectedListener() {
         		    @Override
         		    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-        		    	//For future
+        		    	switch(position){
+        		    	case 0:
+        		    		AppData.setCurrentAgeRestriction(0);
+        		    		break;
+        		    	case 1:
+        		    		AppData.setCurrentAgeRestriction(10);
+        		    		break;
+        		    	case 2:
+        		    		AppData.setCurrentAgeRestriction(13);
+        		    		break;
+        		    	case 3:
+        		    		AppData.setCurrentAgeRestriction(17);
+        		    		break;
+        		    	case 4:
+        		    		AppData.setCurrentAgeRestriction(18);
+        		    		break;
+        		    	}
         		    }
 
         		    @Override

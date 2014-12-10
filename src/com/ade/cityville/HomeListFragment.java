@@ -76,13 +76,29 @@ public class HomeListFragment extends Fragment {
 	}
 	
 	protected void toCityEventActivity(CityEvent ce) {
+		SoundManager.playSound(6, 1);
 		Intent intent = new Intent(getActivity(), CityEventActivity.class);
 		//intent.putExtra("CITY_EVENT_Name", position);
-		intent.putExtra("THE-CITY-EVENT", ce);
+		//intent.putExtra("THE-CITY-EVENT", ce);
+		Bundle b = new Bundle();
+		b.putInt("id", findCityEventPosition(ce.getName())); //Your id
+		intent.putExtras(b); //Put your id to your next Intent
 		startActivity(intent);
 	}
 	
 	public void searchEvents(String text){
 		HomeListFragment.this.listAdapter.getFilter().filter(text);
+	}
+	
+	public int findCityEventPosition(String title){
+		int i =0;
+		for (CityEvent ce: AppData.getCityEventsList()){
+			if (ce.getName().equals(title)){
+				return i;
+			}
+			i++;
+		}
+		
+		return 0;
 	}
 }

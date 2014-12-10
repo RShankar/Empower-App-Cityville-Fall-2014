@@ -26,14 +26,21 @@ import android.widget.Filterable;
 import android.widget.RelativeLayout;
 
 public class HomeGridFragment extends Fragment implements OnClickListener, Filterable{
-	View vi;
+	private View vi;
+	private ArrayList<CityEvent> filteredResults = null;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		vi = inflater.inflate(R.layout.fragment_home_grid, container, false);
 		AppData.updateCityEvents();
-		if (AppData.getCityEventsList() != null || AppData.getCityEventsList().size() > 0){
-			generateView(AppData.getCityEventsList());
+		if (AppData.getCityEventsList() != null || 
+				AppData.getCityEventsList().size() > 0){
+			
+			if (filteredResults != null){
+				generateView(filteredResults);
+			}else{
+				generateView(AppData.getCityEventsList());
+			}
 		}else{}
 		
 		
@@ -76,10 +83,10 @@ public class HomeGridFragment extends Fragment implements OnClickListener, Filte
 			View.setOnClickListener(this);
 			
 			final String image = ce.getImg(); final CityEvent tempce = ce;
-	        if (image.equalsIgnoreCase("") || image.equalsIgnoreCase(" ") || image == null){
+	        //if (image.equalsIgnoreCase("") || image.equalsIgnoreCase(" ") || image == null){
 	        	View.getIvIcon().setImageResource(AppData.getEventIcon(ce.getName().substring(0, 1).toLowerCase()));
-	        }else{
-	        	//View.getIvIcon().setImageURI(Uri.parse(getString(R.string.image_server_address) + image));
+	       /*}else{
+	        	View.getIvIcon().setImageURI(Uri.parse(getString(R.string.image_server_address) + image));
 	        	getActivity().runOnUiThread(new Runnable(){ //Cannot run http request on main thread
 
 					@Override
@@ -90,7 +97,7 @@ public class HomeGridFragment extends Fragment implements OnClickListener, Filte
 						
 					}});
 	        	
-	        }
+	        }*/
 			
 			View.setBackgroundResource(R.color.light_gray);
 			View.getTvTitle().setPadding(5, 0, 0, 0);
@@ -218,9 +225,11 @@ public class HomeGridFragment extends Fragment implements OnClickListener, Filte
 	}
 	
 	protected void toCityEventActivity(int position) {
+		SoundManager.playSound(6, 1);
 		Intent intent = new Intent(getActivity(), CityEventActivity.class);
-		//intent.putExtra("CITY_EVENT_Name", position);
-		intent.putExtra("THE-CITY-EVENT", AppData.getCityEventsList().get(position));
+		Bundle b = new Bundle();
+		b.putInt("id", position); //Your id
+		intent.putExtras(b); //Put your id to your next Intent
 		startActivity(intent);
 	}
 
@@ -238,8 +247,17 @@ public class HomeGridFragment extends Fragment implements OnClickListener, Filte
 	                //If there's nothing to filter on, return the original data for your list
 	                if(charSequence == null || charSequence.length() == 0 || charSequence.equals(""))
 	                {
-	                    results.values = AppData.getCityEventsList();
-	                    results.count = AppData.getCityEventsList().size();
+	                	ArrayList<CityEvent> checkedEvents = new ArrayList<CityEvent>();
+	                	for (CityEvent ce: AppData.getCityEventsList()){
+		                	if (AppData.checkFilters(ce) && AppData.checkAgeRestriction(ce)){
+		                		checkedEvents.add(ce);
+		                	}
+	                	}
+	                	
+	                	//results.values = AppData.getCityEventsList();
+	                    //results.count = AppData.getCityEventsList().size();
+	                	results.values = checkedEvents;
+                    	results.count = checkedEvents.size();
 	                }
 	                else
 	                {
@@ -252,7 +270,9 @@ public class HomeGridFragment extends Fragment implements OnClickListener, Filte
 	                        //I'm not sure how you're going to do comparison, so you'll need to fill out this conditional
 	                        if(ce.getName().toLowerCase().contains(charSequence.toString().toLowerCase()))
 	                        {
-	                            filterResultsData.add(ce);
+	                        	if (AppData.checkFilters(ce) && AppData.checkAgeRestriction(ce)){
+	                        		filterResultsData.add(ce);
+	                        	}
 	                        }
 	                    }            
 
@@ -267,7 +287,20 @@ public class HomeGridFragment extends Fragment implements OnClickListener, Filte
 	            protected void publishResults(CharSequence charSequence, FilterResults filterResults)
 	            {
 	                //TODO Update view here, by clearing the view before redrawing it.
+	            	if (((ArrayList<CityEvent>) filterResults.values).size() <= 0){
+	            		filteredResults = new ArrayList<CityEvent>();
+	            		HomeActivity.getHomeGridFragment().getView().postInvalidate();
+	            		//HomeActivity.getHomeGridFragment().onCreate(null);
+	            		//HomeActivity.getHomeGridFragment().getView().invalidate();
+	            	}else{
+	            		filteredResults = (ArrayList<CityEvent>) filterResults.values;
+	            		HomeActivity.getHomeGridFragment().getView().postInvalidate();
+	            		//HomeActivity.getHomeGridFragment().onCreate(null);
+		            	//HomeActivity.getHomeGridFragment().getView().invalidate();
+	            	}
 	            	
+	            	
+	            	//HomeActivity.getHomeGridFragment().onCreate(null);
 	            	//generateView((ArrayList<CityEvent>) filterResults.values);
 	            }
 	        };

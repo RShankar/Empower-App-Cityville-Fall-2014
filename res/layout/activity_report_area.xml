@@ -10,7 +10,7 @@
     
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical" 
         android:layout_marginTop="10dp">
 
@@ -36,7 +36,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" 
             android:orientation="horizontal"
             android:layout_marginTop="10dp">
@@ -60,7 +60,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" 
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center">
 
             <TextView
                 android:id="@+id/textView3"
@@ -75,6 +76,12 @@
                 android:layout_weight="1"
                 android:inputType="number" />
 
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="m" />
+
             <Button
                 android:id="@+id/buttonRadius"
                 style="?android:attr/buttonStyleSmall"
@@ -88,19 +95,21 @@
             android:id="@+id/mapReport"
             android:name="com.google.android.gms.maps.MapFragment"
             android:layout_width="match_parent"
-            android:layout_height="240dp" 
+            android:layout_height="wrap_content" 
             android:layout_marginTop="10dp"/>
 
-        <Button
+        
+        
+    </LinearLayout>
+
+    
+	<Button
             android:id="@+id/buttonReport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Report" 
             android:layout_marginTop="10dp"
-            android:layout_gravity="center"/>
-        
-    </LinearLayout>
-
-    
-
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"/>
+	
 </RelativeLayout>

@@ -28,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -118,6 +119,7 @@ public class NavigationDrawerFragmentR extends Fragment {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
+						SoundManager.playSound(6, 1);
 						selectItem(position);
 					}
 				});
@@ -134,6 +136,7 @@ public class NavigationDrawerFragmentR extends Fragment {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                     int groupPosition, int childPosition, long id) {
+				SoundManager.playSound(6, 1);
                 Toast.makeText(
                         getActivity(),
                         listDataHeader.get(groupPosition)
@@ -149,12 +152,20 @@ public class NavigationDrawerFragmentR extends Fragment {
 			 
 		    @Override
 		    public void onGroupExpand(int groupPosition) {
+				SoundManager.playSound(6, 1);
 		        Toast.makeText(getActivity(),
 		                listDataHeader.get(groupPosition) + " Expanded",
 		                Toast.LENGTH_SHORT).show();
 		    }
 		});
 		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+		mDrawerListView.setOnGroupCollapseListener(new OnGroupCollapseListener(){
+			@Override
+			public void onGroupCollapse(int groupPosition) {
+				SoundManager.playSound(6, 1);
+			}
+			
+		});
 		return mDrawerListView;
 	}
 
@@ -310,6 +321,7 @@ public class NavigationDrawerFragmentR extends Fragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		SoundManager.playSound(6, 1);
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}

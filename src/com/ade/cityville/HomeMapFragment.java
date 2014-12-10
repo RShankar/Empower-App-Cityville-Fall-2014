@@ -8,6 +8,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
@@ -106,11 +107,10 @@ public class HomeMapFragment extends Fragment implements Filterable{
 
 		@Override
 		public void onMapClick(LatLng arg0) {
-			
-			
+			SoundManager.playSound(6, 1);
 		}});
        
-       map.setOnMarkerClickListener(new OnMarkerClickListener(){
+       /*map.setOnMarkerClickListener(new OnMarkerClickListener(){
 
 		@Override
 		public boolean onMarkerClick(Marker arg0) {
@@ -118,6 +118,20 @@ public class HomeMapFragment extends Fragment implements Filterable{
 			intent.putExtra("THE-CITY-EVENT", findCityEvent(arg0.getTitle()));
 			startActivity(intent);
 			return false;
+		}});*/
+       
+       map.setOnInfoWindowClickListener(new OnInfoWindowClickListener(){
+
+		@Override
+		public void onInfoWindowClick(Marker marker) {
+			Intent intent = new Intent(getActivity(), CityEventActivity.class);
+			//intent.putExtra("THE-CITY-EVENT", findCityEvent(marker.getTitle()));
+			
+			Bundle b = new Bundle();
+			b.putInt("id", findCityEventPosition(marker.getTitle())); //Your id
+			intent.putExtras(b); //Put your id to your next Intent
+			
+			startActivity(intent);
 		}});
        
        loadCityEvents(AppData.getCityEventsList());
@@ -132,11 +146,17 @@ public class HomeMapFragment extends Fragment implements Filterable{
 		if (alCE != null && alCE.size() > 0 )
 		{
 			for (CityEvent ce: alCE){
+				String cost = "";
+				if (ce.getCost() <= 0.0){
+					cost = "Free";
+				}else{
+					cost = "$" + ce.getCost();
+				}
 				if (ce.getLocation() != null){
 					if (!ce.getLocation().getProvider().equalsIgnoreCase("error")){
 						Marker mark = map.addMarker(new MarkerOptions()
 						.title(ce.getName())
-						.snippet("Cost: $"+ce.getCost())
+						.snippet("" + ce.getDate() + " @ " + ce.getTime() + ", Cost: "+ cost)
 						.position(new LatLng(ce.getLocation().getLatitude(),ce.getLocation().getLongitude())
 						));	
 					}
@@ -161,6 +181,9 @@ public class HomeMapFragment extends Fragment implements Filterable{
 				}else if (ra.getType().equalsIgnoreCase("traffic")){
 					shadeColor = 0x88FF9933;
 					strokeColor = 0xFFFF6600;
+				}else if (ra.getType().equalsIgnoreCase("other")){
+					shadeColor = 0x88DCDCDC;
+					strokeColor = 0xFFA9A9A9;
 				}
 				
 				if (!ra.getLocation().getProvider().equals("error")){
@@ -198,6 +221,18 @@ public class HomeMapFragment extends Fragment implements Filterable{
 		
 		return null;
 	}
+	
+	public int findCityEventPosition(String title){
+		int i =0;
+		for (CityEvent ce: AppData.getCityEventsList()){
+			if (ce.getName().equals(title)){
+				return i;
+			}
+			i++;
+		}
+		
+		return 0;
+	}
 
 	@Override
 	public Filter getFilter() {
@@ -212,8 +247,17 @@ public class HomeMapFragment extends Fragment implements Filterable{
 	                //If there's nothing to filter on, return the original data for your list
 	                if(charSequence == null || charSequence.length() == 0 || charSequence.equals(""))
 	                {
-	                    results.values = AppData.getCityEventsList();
-	                    results.count = AppData.getCityEventsList().size();
+	                	ArrayList<CityEvent> checkedEvents = new ArrayList<CityEvent>();
+	                	for (CityEvent ce: AppData.getCityEventsList()){
+		                	if (AppData.checkFilters(ce) && AppData.checkAgeRestriction(ce)){
+		                		checkedEvents.add(ce);
+		                	}
+	                	}
+	                	
+	                	//results.values = AppData.getCityEventsList();
+	                    //results.count = AppData.getCityEventsList().size();
+	                	results.values = checkedEvents;
+                    	results.count = checkedEvents.size();
 	                }
 	                else
 	                {
@@ -226,7 +270,9 @@ public class HomeMapFragment extends Fragment implements Filterable{
 	                        //I'm not sure how you're going to do comparison, so you'll need to fill out this conditional
 	                        if(ce.getName().toLowerCase().contains(charSequence.toString().toLowerCase()))
 	                        {
-	                            filterResultsData.add(ce);
+	                        	if (AppData.checkFilters(ce) && AppData.checkAgeRestriction(ce)){
+	                        		filterResultsData.add(ce);
+	                        	}
 	                        }
 	                    }            
 
